@@ -1,0 +1,145 @@
+ {% extends 'base.html' %}
+ {% load static %}
+
+ {% block content %}
+ <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+     <div class="row tm-row">
+                <div class="col-12">
+                    <hr class="tm-hr-primary tm-mb-55">
+                   
+                    {% if request.user == blog.author %}
+                     <div style="display: flex; justify-content: center; align-items: center; margin: 5px;">
+                        <a href="{% url 'edit_blog' blog.id %}" class="btn btn-primary">Edit Pose</a>
+
+                       <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" style="margin: 2px;" data-toggle="modal" data-target="#exampleModal">
+                        Delete Post
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{{blog.title|title}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Do you want delete this is post?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <a href="{% url 'delete_blog' blog.id %}"><button type="button" class="btn btn-danger">Yes</button> </a>
+                            </div>
+                            </div>
+                        </div>
+                        </div> 
+
+                    </div> 
+                        
+                    {% endif %}
+                    <!-- Video player 1422x800 -->
+                    <img src="{{blog.img.url}}" width="954" height="535" controls class="tm-mb-40">							  
+                    </img>
+                </div>
+            </div>
+            <div class="row tm-row">
+                <div class="col-lg-8 tm-post-col">
+                    <div class="tm-post-full">                    
+                        <div class="mb-4">
+                            <h2 class="pt-2 tm-color-primary tm-post-title">{{blog.title|title}}</h2>
+                            <p class="tm-mb-40">{{blog.date|date:"M d , Y"}} posted by {{blog.author|title}}</p>
+                            <p>
+                               {{blog.content|title}}
+                              </p>
+                          
+                            <span class="d-block text-right tm-color-primary">Creative . Design . Business</span>
+                        </div>
+                        
+                        <!-- Comments -->
+                        <div>
+                            <h2 class="tm-color-primary tm-post-title">Comments</h2>
+                            <hr class="tm-hr-primary tm-mb-45">
+                            
+                            {% for comment in comments  %}
+
+                      <div class="tm-comment tm-mb-45">
+                                <figure class="tm-comment-figure">
+                                    <img src="{% if comment.user.profile.img %} {{comment.user.profile.img.url}} {% else %} data:img/png;base64,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  {% endif %}" width="100" height="100" alt="img" class="img-fluid" alt="img" class="mb-2 rounded-circle img-thumbnail">
+                                    <figcaption class="tm-color-primary text-center">{{comment.user.username|title}}</figcaption>
+                                </figure>          
+                                <div>
+                                    <p>
+                                     {{comment.comment|title}}
+                                    </p>
+                                    <div class="d-flex justify-content-between">
+                                        <form action="{% url 'delete' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id-delete" id="id-delete" value="{{comment.id}}">
+                                            <input type="hidden" name="id" id="id" value="{{blog.id}}">
+                                            <button type="submit"></button>
+                                            <button type="submit" class="tm-color-primary"><i class="fas fa-trash-alt" style ="font-size:x-large; color: red; "></i> </button>
+                                       </form>
+                                        <span class="tm-color-primary"> - {{comment.created_at|timesince}}</span>
+                                    </div>                                                 
+                                </div>                                
+                            </div>
+                                
+                            {% endfor %}
+                                
+                          
+                           
+                            <form action="{% url 'comment' %}" class="mb-5 tm-comment-form" method="post">
+                                {% csrf_token %}
+                                <h2 class="tm-color-primary tm-post-title mb-4">Your comment</h2>
+                                <div class="mb-4">
+                                    <input type="hidden" value="{{blog.id}}" name="id" id="id">
+                                    <input type="text" name="message" id="message" class="form-control">
+                                </div>
+                                
+                                <div class="text-right">
+                                    <button type="submit" class="tm-btn tm-btn-primary tm-btn-small">Submit</button>                        
+                                </div>                                
+                            </form>                          
+                        </div>
+                    </div>
+                </div>
+                <aside class="col-lg-4 tm-aside-col">
+                    <div class="tm-post-sidebar">
+                        <hr class="mb-3 tm-hr-primary">
+                        <h2 class="mb-4 tm-post-title tm-color-primary">Categories</h2>
+                        <ul class="tm-mb-75 pl-5 tm-category-list">
+
+                            {% comment %} {% for tag in blog.tags.all %}
+                             <li><a href='{% url "get_tags" tag.slug %}' class="tm-color-primary">{{tag.name}}</a></li>
+                            {% endfor %} {% endcomment %}
+                            {% if tag.slug %}
+                                <li><a href="{% url 'get_tags' tag.slug %}" class="tm-color-primary">{{ tag.name }}</a></li>
+                                {% else %}
+                                <li>{{ tag.name }}</li>
+                            {% endif %}
+
+                        </ul>
+                        <hr class="mb-3 tm-hr-primary">
+                        <h2 class="tm-mb-40 tm-post-title tm-color-primary">Related Posts</h2>
+                        
+                        {% for r in blog.get_related_posts_by_tags %}
+                              <a href="{{r.get_absolute_url}}" class="d-block tm-mb-40">
+                            <figure>
+                                <img src="{{r.img.url}}" alt="img" class="mb-3 img-fluid">
+                                <figcaption class="tm-color-primary">{{r.title|title}}</figcaption>
+                            </figure>
+                        </a>
+                            
+                        {% endfor %}
+                            
+                     
+                       
+                    </div>                    
+                </aside>
+            </div>
+
+ {% endblock content %}

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="add">
+    <a href="{% url 'create_post' %}"> <button class="btn btn-primary"> Add  New Post </button></a>
+</div>
+
+<div class="row tm-row">
+    
+    {% for blog in all_blogs  %}
+        <article class="col-12 col-md-6 tm-post">
+                    <hr class="tm-hr-primary">
+                    <a href="{{blog.get_absolute_url}}" class="effect-lily tm-post-link tm-pt-60">
+                        <div class="tm-post-link-inner">
+                            <img src="{{blog.img.url}}" alt="img" class="img-fluid">                            
+                        </div>
+                        
+                        {% if forloop.counter == 1 or forloop.counter == 2 %}
+                            <span class="position-absolute tm-new-badge">New</span>
+                        {% endif %}
+                            
+                        
+                        <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{blog.title|title}}</h2>
+                    </a>                    
+                    <p class="tm-pt-30">
+                       {{blog.content}}
+                    </p>
+                    <div class="d-flex justify-content-between tm-pt-45">
+                        <span class="tm-color-primary">Travel . Events</span>
+                        <span class="tm-color-primary">{{blog.date|date:'M d, Y'}}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        
+                        {% if blog.comment_count.count == 0 %}
+                            <span>No Comment</span>
+                        {% else %}
+                            <span>{{blog.comment_count.count}} comments</span>
+                        {% endif %}
+                        <span>{{blog.author|title}}</span>
+                    </div>
+                </article>
+        
+    {% endfor %}
+    </div>
+    {% comment %} pagnate {% endcomment %}
+    {% if all_blogs.has_other_pages %}
+
+         <div class="row tm-row tm-mt-100 tm-mb-75">
+                <div class="tm-prev-next-wrapper">
+                    {% if all_blogs.has_previous %}
+                     <a href="?page={{all_blogs.previous_page_number}}" class="mb-2 tm-btn tm-btn-primary tm-prev-next  tm-mr-20">Prev</a>
+                    
+                     {% else %}
+                      <a href="?page={{all_blogs.next_page_number}}" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled tm-mr-20">Prev</a>
+                     {% endif %}
+
+                     {% if all_blogs.has_next %}
+                     <a href="#" class="mb-2 tm-btn tm-btn-primary tm-prev-next">Next</a>
+                     {% else %}
+                     <a href="#" class="mb-2 tm-btn tm-btn-primary disabled tm-prev-next">Next</a>
+                     {% endif %}
+                   
+                    
+                </div>
+                <div class="tm-paging-wrapper">
+                    <span class="d-inline-block mr-3">Page</span>
+                    <nav class="tm-paging-nav d-inline-block">
+                        <ul>
+                            
+                            {% for p in all_blogs.paginator.page_range %}
+                            {% if all_blogs.number == p %}
+                              <li class="tm-paging-item active">
+                                <a href="#" class="mb-2 tm-btn tm-paging-link">{{p}}</a>
+                            </li>
+                            {% else %}
+                              <li class="tm-paging-item">
+                                <a href="?page={{p}}" class="mb-2 tm-btn tm-paging-link">{{p}}</a>
+                            </li>
+                            {% endif %}
+
+                                
+                            {% endfor %}
+                                
+                          
+                           
+                        </ul>
+                    </nav>
+                </div>                
+            </div>
+    {% endif %}
+           
+    
+{% endblock content %}
+    
