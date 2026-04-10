@@ -6,7 +6,8 @@ class Profile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
   name = models.CharField(max_length=200)
   age = models.IntegerField(default=0,blank=True)
-  img = models.ImageField(upload_to='profile-image/', blank=True)
+  # img = models.ImageField(upload_to='profile-image/', blank=True,null=True)
+  img = models.ImageField(upload_to='profile-image/', default='profile-image/default.jpg')
   bio = models.TextField()
 
 

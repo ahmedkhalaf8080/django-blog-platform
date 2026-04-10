@@ -10,7 +10,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=500)
     content = models.TextField()
     date = models.DateTimeField( auto_now_add=True)
-    img = models.ImageField(upload_to='blog-image/')
+    img = models.ImageField(upload_to='blog-image/',blank=True,null=True)
     author = models.ForeignKey(User,  on_delete=models.CASCADE)
     tags = TaggableManager() 
     
